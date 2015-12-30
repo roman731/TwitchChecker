@@ -29,12 +29,12 @@ public class Checker extends TimerTask  {
 
             try
             {
+                //go to the API site and read it into API_String
                 URL myURL = new URL("https://api.twitch.tv/kraken/streams/" + getInputString());
                 URLConnection yc = myURL.openConnection();
                 BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 
                 API_String = in.readLine();
-
             }
             catch(FileNotFoundException x)
             {
@@ -69,6 +69,7 @@ public class Checker extends TimerTask  {
             }
         });
     }
+    //getters and setters
     public static void setInputString(String x)
     {
         inputString = x;
@@ -77,8 +78,6 @@ public class Checker extends TimerTask  {
     {
         return inputString;
     }
-
-
 
 
 }

@@ -28,64 +28,79 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Twitch Alerter");
 
+        //input field to enter the user's name we're looking for
+        inputField = new TextField("Enter steamer name here");
+        inputField.setTranslateY(-60);
+
+        //label displaying status of twitch user
         dynamicLabelStatus = new Label("OFFLINE");
         dynamicLabelStatus.setTranslateY(67);
         dynamicLabelStatus.setFont(Font.font("Arial", 30));
         dynamicLabelStatus.setTextFill(Color.RED);
 
+
+        //to do 'looking for user X' label
         Label dynamicLabelChecking = new Label();
+        dynamicLabelChecking.setFont(Font.font("Arial", FontPosture.ITALIC, 12));
+        dynamicLabelChecking.setTranslateY(7);
 
+
+        //Button to manually check the status of the stream...
+        //The plan is to have the program automatically check for streamer every minute, so if the user
+        //wants to manually check at any point then that option is available
         Button buttonManuelCheck = new Button("Manual Check");
-        Button buttonSubmitName = new Button("Update Name");
+        buttonManuelCheck.setOnAction(e -> {System.out.println("Button Clicked");  Checker.myFunction();}  );
+        buttonManuelCheck.setTranslateX(0);
+        buttonManuelCheck.setTranslateY(100);
 
+        //Gets input form textfield and updates the name of the user we're searching
+        Button buttonSubmitName = new Button("Update Name");
+        buttonSubmitName.setOnAction(e -> {Checker.setInputString(inputField.getText());});
+        buttonSubmitName.setTranslateY(-30);
+
+        // separators to make GUI look more clean
         Separator sep1 = new Separator();
         sep1.setTranslateY(-12);
         Separator sep2 = new Separator();
         sep2.setTranslateY(25);
+
+        //simple static labels
         Label staticLabelStatus = new Label("Status:");
         Label staticLabelName = new Label("Enter streamer name: ");
+        staticLabelName.setTranslateY(-90);
 
-        //needs update method
 
-
-        inputField = new TextField("Enter steamer name here");
-        inputField.setTranslateY(-60);
-
-        buttonSubmitName.setOnAction(e -> {Checker.setInputString(inputField.getText());});
-        buttonManuelCheck.setOnAction(e -> {System.out.println("Button Clicked");  Checker.myFunction();}  );
-
+        //create new StackPane
         StackPane layout = new StackPane();
-
-
-        buttonManuelCheck.setTranslateX(0);
-        buttonManuelCheck.setTranslateY(100);
         staticLabelStatus.setTranslateX(0);
         staticLabelStatus.setTranslateY(40);
         staticLabelStatus.setFont(Font.font("Arial", 12));
-        dynamicLabelChecking.setFont(Font.font("Arial", FontPosture.ITALIC, 12));
-        dynamicLabelChecking.setTranslateY(7);
-        staticLabelName.setTranslateY(-90);
-        buttonSubmitName.setTranslateY(-30);
+
+
+        //add all components to layout
         layout.getChildren().add(inputField);
         layout.getChildren().add(dynamicLabelStatus);
         layout.getChildren().add(staticLabelName);
         layout.getChildren().add(buttonManuelCheck);
         layout.getChildren().add(buttonSubmitName);
         layout.getChildren().add(staticLabelStatus);
-
         layout.getChildren().add(dynamicLabelChecking);
         layout.getChildren().add(sep1);
         layout.getChildren().add(sep2);
+
+        //create new scene
         Scene scene = new Scene(layout, 250, 220);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
 
+        //run the twitch API method.. need to add start and stop buttons
         Checker.setInputString("aphromoo");
         Checker.myFunction();
 
     }
 
+    //gets called in Checker class, which tells the dynamicLabel what to display
     public static void updateStatus(Boolean x)
     {
         if(x==true)
@@ -95,6 +110,7 @@ public class Main extends Application {
         //    txtField.setText("offlien bro");
             dynamicLabelStatus.setText("OFFLINE");
     }
+    //under construction
     public static void updateLabel(String name)
     {
         dynamicLabelChecking.setText("Checking status of: "+ Checker.getInputString() +" ..............");
