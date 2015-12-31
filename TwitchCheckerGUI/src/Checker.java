@@ -12,11 +12,16 @@ import java.util.TimerTask;
 public class Checker extends TimerTask  {
 
     private static String inputString = null;
+    public static Timer timer;
 
     public static void myFunction()
     {
-        Timer timer = new Timer(false);
+        timer = new Timer(false);
         timer.schedule(new Checker(), 0, 3000);
+    }
+    public static void stopTimer()
+    {
+        timer.cancel();
     }
 
     public void run()
@@ -64,8 +69,10 @@ public class Checker extends TimerTask  {
                         Main.updateStatus(false);
                     }
                 }
-                else
+                else{
                     Main.updateStatus(false);
+                    System.out.println("Non existent stream");
+                }
             }
         });
     }

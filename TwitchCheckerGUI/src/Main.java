@@ -1,4 +1,3 @@
-//GUI IMPORTS
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -44,6 +43,20 @@ public class Main extends Application {
         dynamicLabelChecking.setFont(Font.font("Arial", FontPosture.ITALIC, 12));
         dynamicLabelChecking.setTranslateY(7);
 
+        //Start searching button
+        Button buttonStart = new Button("Start");
+        buttonStart.setOnAction(e -> {
+           // Checker.setInputString("aphromoo");
+            Checker.myFunction();
+        });
+        buttonStart.setTranslateX(-90);
+        buttonStart.setTranslateY(-30);
+
+        //pause searching button
+        Button buttonStop = new Button("Stop");
+        buttonStop.setOnAction(e -> {Checker.stopTimer();});
+        buttonStop.setTranslateY(-30);
+        buttonStop.setTranslateX(90);
 
         //Button to manually check the status of the stream...
         //The plan is to have the program automatically check for streamer every minute, so if the user
@@ -78,6 +91,8 @@ public class Main extends Application {
 
 
         //add all components to layout
+        layout.getChildren().add(buttonStart);
+        layout.getChildren().add(buttonStop);
         layout.getChildren().add(inputField);
         layout.getChildren().add(dynamicLabelStatus);
         layout.getChildren().add(staticLabelName);
@@ -88,15 +103,15 @@ public class Main extends Application {
         layout.getChildren().add(sep1);
         layout.getChildren().add(sep2);
 
+
         //create new scene
         Scene scene = new Scene(layout, 250, 220);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
         primaryStage.show();
 
+
         //run the twitch API method.. need to add start and stop buttons
-        Checker.setInputString("aphromoo");
-        Checker.myFunction();
 
     }
 
@@ -104,10 +119,8 @@ public class Main extends Application {
     public static void updateStatus(Boolean x)
     {
         if(x==true)
-         //   txtField.setText("online bro");
-            dynamicLabelStatus.setText("ONLINE BRO");
+            dynamicLabelStatus.setText("ONLINE");
         else
-        //    txtField.setText("offlien bro");
             dynamicLabelStatus.setText("OFFLINE");
     }
     //under construction
