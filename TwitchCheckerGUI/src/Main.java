@@ -68,10 +68,12 @@ public class Main extends Application {
         //pause searching button
         buttonStop = new Button("Stop");
         buttonStop.setOnAction(e -> {
-            Checker.stopTimer();
+
             buttonStart.setDisable(false);
             buttonStop.setDisable(true);
             buttonSubmitName.setDisable(false);
+            dynamicLabelChecking.setText("Status: idle.");
+            Checker.stopTimer();
         });
         buttonStop.setTranslateX(67);
         buttonStop.setTranslateY(-30);
@@ -87,7 +89,14 @@ public class Main extends Application {
 
         //Gets input form textfield and updates the name of the user we're searching
         buttonSubmitName = new Button("Update Name");
-        buttonSubmitName.setOnAction(e -> {Checker.setInputString(inputField.getText());});
+        buttonSubmitName.setOnAction(e -> {
+            Checker.setInputString(inputField.getText());
+            if(Checker.getInputString() != null) {
+                buttonStart.setDisable(false);
+            }
+            else
+                dynamicLabelChecking.setText("ERROR: please update text field. ");
+        });
         buttonSubmitName.setTranslateY(-30);
 
         // separators to make GUI look more clean
@@ -131,20 +140,21 @@ public class Main extends Application {
         primaryStage.show();
 
         buttonStop.setDisable(true);
+        buttonStart.setDisable(true);
 
     }
 
     //gets called in Checker class, which tells the dynamicLabel what to display
     public static void updateStatus(Boolean x)
     {
-        if(x==true)
+        if(x==true) {
+            dynamicLabelStatus.setTextFill(Color.GREEN);
             dynamicLabelStatus.setText("ONLINE");
-        else
+        }
+        else {
+            dynamicLabelStatus.setTextFill(Color.RED);
             dynamicLabelStatus.setText("OFFLINE");
+        }
     }
-    //under construction
-    public static void updateLabel(String name)
-    {
-        dynamicLabelChecking.setText("Checking status of: "+ Checker.getInputString() +" ..............");
-    }
+
 }
