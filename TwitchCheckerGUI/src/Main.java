@@ -17,6 +17,9 @@ public class Main extends Application {
     static TextField inputField;
     static Label dynamicLabelStatus;
     static Label dynamicLabelChecking;
+    public Button buttonStart;
+    public Button buttonStop;
+    public Button buttonSubmitName;
 
 
     public static void main(String[] args) {
@@ -27,8 +30,10 @@ public class Main extends Application {
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Twitch Alerter");
 
+
+
         //input field to enter the user's name we're looking for
-        inputField = new TextField("Enter steamer name here");
+        inputField = new TextField();
         inputField.setTranslateY(-60);
 
         //label displaying status of twitch user
@@ -40,23 +45,37 @@ public class Main extends Application {
 
         //to do 'looking for user X' label
         Label dynamicLabelChecking = new Label();
-        dynamicLabelChecking.setFont(Font.font("Arial", FontPosture.ITALIC, 12));
+        dynamicLabelChecking.setFont(Font.font("Arial", FontPosture.ITALIC, 10));
         dynamicLabelChecking.setTranslateY(7);
 
         //Start searching button
-        Button buttonStart = new Button("Start");
+        buttonStart = new Button("Start");
         buttonStart.setOnAction(e -> {
-           // Checker.setInputString("aphromoo");
-            Checker.myFunction();
+
+            if(inputField.getText().isEmpty() || inputField.getText().equals(null) || inputField.getText().trim().isEmpty())
+                dynamicLabelChecking.setText("ERROR: please update text field. ");
+            else {
+                buttonStart.setDisable(true);
+                buttonStop.setDisable(false);
+                buttonSubmitName.setDisable(true);
+                dynamicLabelChecking.setText("Searching for user: " + Checker.getInputString()+" ....");
+                Checker.myFunction();
+            }
         });
-        buttonStart.setTranslateX(-90);
+        buttonStart.setTranslateX(-67);
         buttonStart.setTranslateY(-30);
 
         //pause searching button
-        Button buttonStop = new Button("Stop");
-        buttonStop.setOnAction(e -> {Checker.stopTimer();});
+        buttonStop = new Button("Stop");
+        buttonStop.setOnAction(e -> {
+            Checker.stopTimer();
+            buttonStart.setDisable(false);
+            buttonStop.setDisable(true);
+            buttonSubmitName.setDisable(false);
+        });
+        buttonStop.setTranslateX(67);
         buttonStop.setTranslateY(-30);
-        buttonStop.setTranslateX(90);
+
 
         //Button to manually check the status of the stream...
         //The plan is to have the program automatically check for streamer every minute, so if the user
@@ -67,7 +86,7 @@ public class Main extends Application {
         buttonManuelCheck.setTranslateY(100);
 
         //Gets input form textfield and updates the name of the user we're searching
-        Button buttonSubmitName = new Button("Update Name");
+        buttonSubmitName = new Button("Update Name");
         buttonSubmitName.setOnAction(e -> {Checker.setInputString(inputField.getText());});
         buttonSubmitName.setTranslateY(-30);
 
@@ -105,13 +124,13 @@ public class Main extends Application {
 
 
         //create new scene
-        Scene scene = new Scene(layout, 250, 220);
+        Scene scene = new Scene(layout, 180, 220);
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
+        primaryStage.setAlwaysOnTop(true);
         primaryStage.show();
 
-
-        //run the twitch API method.. need to add start and stop buttons
+        buttonStop.setDisable(true);
 
     }
 
