@@ -14,7 +14,7 @@ public class Checker extends TimerTask  {
     private static String inputString = null;
     public static Timer timer;
 
-    public static void myFunction()
+    public static void timerFunction()
     {
         timer = new Timer(false);
         timer.schedule(new Checker(), 0, 3000);
@@ -49,7 +49,6 @@ public class Checker extends TimerTask  {
             {
                 errorCaught = true;
             }
-            //this needed?
             catch(Exception x)
             {
                 errorCaught = true;
@@ -85,6 +84,4 @@ public class Checker extends TimerTask  {
     {
         return inputString;
     }
-
-
 }

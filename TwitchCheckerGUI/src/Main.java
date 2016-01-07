@@ -1,7 +1,6 @@
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
@@ -10,17 +9,16 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
-import javafx.stage.Stage;
+
 
 public class Main extends Application {
 
     static TextField inputField;
     static Label dynamicLabelStatus;
-    static Label dynamicLabelChecking;
     public Button buttonStart;
     public Button buttonStop;
     public Button buttonSubmitName;
-
+    public Checker _checker = new Checker();
 
     public static void main(String[] args) {
         launch(args);
@@ -29,8 +27,6 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Twitch Alerter");
-
-
 
         //input field to enter the user's name we're looking for
         inputField = new TextField();
@@ -41,7 +37,6 @@ public class Main extends Application {
         dynamicLabelStatus.setTranslateY(67);
         dynamicLabelStatus.setFont(Font.font("Arial", 30));
         dynamicLabelStatus.setTextFill(Color.RED);
-
 
         //to do 'looking for user X' label
         Label dynamicLabelChecking = new Label();
@@ -58,8 +53,8 @@ public class Main extends Application {
                 buttonStart.setDisable(true);
                 buttonStop.setDisable(false);
                 buttonSubmitName.setDisable(true);
-                dynamicLabelChecking.setText("Searching for user: " + Checker.getInputString()+" ....");
-                Checker.myFunction();
+                dynamicLabelChecking.setText("Searching for user: " + _checker.getInputString()+" ....");
+                _checker.timerFunction();
             }
         });
         buttonStart.setTranslateX(-67);
@@ -73,25 +68,24 @@ public class Main extends Application {
             buttonStop.setDisable(true);
             buttonSubmitName.setDisable(false);
             dynamicLabelChecking.setText("Status: idle.");
-            Checker.stopTimer();
+            _checker.stopTimer();
         });
         buttonStop.setTranslateX(67);
         buttonStop.setTranslateY(-30);
-
 
         //Button to manually check the status of the stream...
         //The plan is to have the program automatically check for streamer every minute, so if the user
         //wants to manually check at any point then that option is available
         Button buttonManuelCheck = new Button("Manual Check");
-        buttonManuelCheck.setOnAction(e -> {System.out.println("Button Clicked");  Checker.myFunction();}  );
+        buttonManuelCheck.setOnAction(e -> {System.out.println("Button Clicked");  _checker.timerFunction();}  );
         buttonManuelCheck.setTranslateX(0);
         buttonManuelCheck.setTranslateY(100);
 
         //Gets input form textfield and updates the name of the user we're searching
         buttonSubmitName = new Button("Update Name");
         buttonSubmitName.setOnAction(e -> {
-            Checker.setInputString(inputField.getText());
-            if(Checker.getInputString() != null) {
+            _checker.setInputString(inputField.getText());
+            if(_checker.getInputString() != null) {
                 buttonStart.setDisable(false);
             }
             else
