@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -17,7 +19,7 @@ public class Checker extends TimerTask  {
     public static void timerFunction()
     {
         timer = new Timer(false);
-        timer.schedule(new Checker(), 0, 3000);
+        timer.schedule(new Checker(), 0, 30000);
     }
     public static void stopTimer()
     {
@@ -29,7 +31,7 @@ public class Checker extends TimerTask  {
         Platform.runLater(() -> {
             boolean errorCaught = false;
 
-            //the string recieved from the Twitch API
+            //the string received from the Twitch API
             String API_String = null;
 
             try
@@ -40,6 +42,11 @@ public class Checker extends TimerTask  {
                 BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 
                 API_String = in.readLine();
+
+                Calendar cal = Calendar.getInstance();
+                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+                System.out.println( sdf.format(cal.getTime()) );
+
             }
             catch(FileNotFoundException x)
             {
@@ -58,19 +65,19 @@ public class Checker extends TimerTask  {
                 if(errorCaught == false)
                 {
                     if (API_String == null) {
-                        System.out.println("OFFLINE NULL");
+                   //     System.out.println("OFFLINE NULL");
                         Main.updateStatus(false);
                     } else if (!(API_String.contains("\"stream\":null") || API_String.contains("\"error\""))) {
-                        System.out.println("STREAM IS ONLINE here");
+                        //System.out.println("STREAM IS ONLINE");
                         Main.updateStatus(true);
                     } else {
-                        System.out.println("STREAM IS OFFLINE");
+                        //System.out.println("STREAM IS OFFLINE");
                         Main.updateStatus(false);
                     }
                 }
                 else{
                     Main.updateStatus(false);
-                    System.out.println("Non existent stream");
+                    //System.out.println("Non existent stream");
                 }
             }
         });
