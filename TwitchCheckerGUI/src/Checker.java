@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.net.URLConnection;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -19,7 +17,7 @@ public class Checker extends TimerTask  {
     public static void timerFunction()
     {
         timer = new Timer(false);
-        timer.schedule(new Checker(), 0, 30000);
+        timer.schedule(new Checker(), 0, 60000);
     }
     public static void stopTimer()
     {
@@ -42,11 +40,6 @@ public class Checker extends TimerTask  {
                 BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
 
                 API_String = in.readLine();
-
-                Calendar cal = Calendar.getInstance();
-                SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-                System.out.println( sdf.format(cal.getTime()) );
-
             }
             catch(FileNotFoundException x)
             {

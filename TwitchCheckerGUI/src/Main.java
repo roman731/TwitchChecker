@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.scene.control.Button;
@@ -10,6 +11,8 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontPosture;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 public class Main extends Application {
@@ -21,10 +24,11 @@ public class Main extends Application {
     private Button buttonSubmitName;
     private Button buttonManuelCheck;
 
-    private Label staticLabelStatus;
-    private Label staticLabelName;
-    private Label dynamicLabelChecking;
-    static Label dynamicLabelStatus;
+    private Label labelStatus;
+    private Label labelName;
+    private Label labelDynamicChecking;
+    static Label labelDynamicStatus;
+    static Label labelDynamicTime;
 
     private Separator sep1;
     private Separator sep2;
@@ -44,27 +48,31 @@ public class Main extends Application {
         inputField.setTranslateY(-60);
 
         //label displaying status of twitch user
-        dynamicLabelStatus = new Label("OFFLINE");
-        dynamicLabelStatus.setTranslateY(67);
-        dynamicLabelStatus.setFont(Font.font("Arial", 30));
-        dynamicLabelStatus.setTextFill(Color.RED);
+        labelDynamicStatus = new Label("OFFLINE");
+        labelDynamicStatus.setTranslateY(67);
+        labelDynamicStatus.setFont(Font.font("Arial", 30));
+        labelDynamicStatus.setTextFill(Color.RED);
 
         //to do 'looking for user X' label
-        dynamicLabelChecking = new Label();
-        dynamicLabelChecking.setFont(Font.font("Arial", FontPosture.ITALIC, 10));
-        dynamicLabelChecking.setTranslateY(7);
+        labelDynamicChecking = new Label();
+        labelDynamicChecking.setFont(Font.font("Arial", FontPosture.ITALIC, 11));
+        labelDynamicChecking.setTranslateY(-1);
+
+        labelDynamicTime = new Label();
+        labelDynamicTime.setFont(Font.font("Arial", FontPosture.ITALIC, 10));
+        labelDynamicTime.setTranslateY(11);
 
         //Start searching button
         buttonStart = new Button("Start");
         buttonStart.setOnAction(e -> {
 
             if(inputField.getText().isEmpty() || inputField.getText().equals(null) || inputField.getText().trim().isEmpty())
-                dynamicLabelChecking.setText("ERROR: please update text field. ");
+                labelDynamicChecking.setText("ERROR: please update text field. ");
             else {
                 buttonStart.setDisable(true);
                 buttonStop.setDisable(false);
                 buttonSubmitName.setDisable(true);
-                dynamicLabelChecking.setText("Searching for user: " + _checker.getInputString()+" .... \n Time of last update: " );
+                labelDynamicChecking.setText("Searching for user: " + _checker.getInputString()+" ...." );
                 _checker.timerFunction();
             }
         });
@@ -78,7 +86,7 @@ public class Main extends Application {
             buttonStart.setDisable(false);
             buttonStop.setDisable(true);
             buttonSubmitName.setDisable(false);
-            dynamicLabelChecking.setText("Status: idle.");
+            labelDynamicChecking.setText("Status: idle.");
             _checker.stopTimer();
         });
         buttonStop.setTranslateX(67);
@@ -100,7 +108,7 @@ public class Main extends Application {
                 buttonStart.setDisable(false);
             }
             else
-                dynamicLabelChecking.setText("ERROR: please update text field. ");
+                labelDynamicChecking.setText("ERROR: please update text field. ");
         });
         buttonSubmitName.setTranslateY(-30);
 
@@ -111,26 +119,27 @@ public class Main extends Application {
         sep2.setTranslateY(25);
 
         //simple static labels
-        staticLabelStatus = new Label("Status:");
-        staticLabelName = new Label("Enter streamer name: ");
-        staticLabelName.setTranslateY(-90);
+        labelStatus = new Label("Status:");
+        labelName = new Label("Enter streamer name: ");
+        labelName.setTranslateY(-90);
 
         //create new StackPane
         StackPane layout = new StackPane();
-        staticLabelStatus.setTranslateX(0);
-        staticLabelStatus.setTranslateY(40);
-        staticLabelStatus.setFont(Font.font("Arial", 12));
+        labelStatus.setTranslateX(0);
+        labelStatus.setTranslateY(40);
+        labelStatus.setFont(Font.font("Arial", 12));
 
         //add all components to layout
         layout.getChildren().add(buttonStart);
         layout.getChildren().add(buttonStop);
         layout.getChildren().add(inputField);
-        layout.getChildren().add(dynamicLabelStatus);
-        layout.getChildren().add(staticLabelName);
+        layout.getChildren().add(labelDynamicStatus);
+        layout.getChildren().add(labelName);
         layout.getChildren().add(buttonManuelCheck);
         layout.getChildren().add(buttonSubmitName);
-        layout.getChildren().add(staticLabelStatus);
-        layout.getChildren().add(dynamicLabelChecking);
+        layout.getChildren().add(labelStatus);
+        layout.getChildren().add(labelDynamicChecking);
+        layout.getChildren().add(labelDynamicTime);
         layout.getChildren().add(sep1);
         layout.getChildren().add(sep2);
 
@@ -143,19 +152,30 @@ public class Main extends Application {
 
         buttonStop.setDisable(true);
         buttonStart.setDisable(true);
+
+        primaryStage.setOnCloseRequest(e -> {
+            Platform.exit();
+            System.exit(0);
+        });
     }
 
     //gets called in Checker class, which tells the dynamicLabel what to display
     public static void updateStatus(Boolean x)
     {
         if(x==true) {
-            dynamicLabelStatus.setTextFill(Color.GREEN);
-            dynamicLabelStatus.setText("ONLINE");
+            labelDynamicStatus.setTextFill(Color.GREEN);
+            labelDynamicStatus.setText("ONLINE");
         }
         else {
-            dynamicLabelStatus.setTextFill(Color.RED);
-            dynamicLabelStatus.setText("OFFLINE");
+            labelDynamicStatus.setTextFill(Color.RED);
+            labelDynamicStatus.setText("OFFLINE");
         }
+
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        System.out.println( sdf.format(cal.getTime()) );
+
+        labelDynamicTime.setText("Time of last search: " + sdf.format(cal.getTime()) );
     }
 
 }
